@@ -161,17 +161,17 @@ function has_uploaded_valid_file($file = [])
         return false;
     }
 
-    $is_valid_or_file_type = is_valid_or_file_type($file['tmp_name']);
+    $is_valid_file_type_or_file_type = is_valid_file_type_or_file_type($file['tmp_name']);
 
-    if ($is_valid_or_file_type !== true) {
-        serve_http_code(400, "Invalid file type (".$is_valid_or_file_type.")");
+    if ($is_valid_file_type_or_file_type !== true) {
+        serve_http_code(400, "Invalid file type (".$is_valid_file_type_or_file_type.")");
         return false;
     }
     
     return true;
 }
 
-function is_valid_or_file_type($file)
+function is_valid_file_type_or_file_type($file)
 {
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $file_type = $finfo->file($file);
