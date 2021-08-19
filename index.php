@@ -185,10 +185,11 @@ function get_file_extension($filename)
 {
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-    if ($extension !== '') {
-        $extension = '.'.$extension;
-        $extension2 = pathinfo(substr($filename,0,-(strlen($extension)+1)), PATHINFO_EXTENSION);
-    }
+    if ($extension === '')
+        return '';
+
+    $extension = '.'.$extension;
+    $extension2 = pathinfo(substr($filename,0,-(strlen($extension)+1)), PATHINFO_EXTENSION);
 
     if ($extension2 === 'tar')
         $extension = $extension2.'.'.$extension;
