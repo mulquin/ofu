@@ -60,7 +60,7 @@ function is_valid_environment()
             return false;
         }
     }
-    
+
     if (UPLOAD_LOG_PATH !== null || ERROR_LOG_PATH !== null) {
         $log_dir = dirname(UPLOAD_LOG_PATH);
         if (!is_dir($log_dir)) {
@@ -411,7 +411,8 @@ function print_debug_info()
     if (PRINT_DEBUG === false)
         return '';
     
-    $has_htaccess = (file_exists('.htaccess') && filesize('.htaccess') > 0) ? 'true' : 'false';
+    $has_root_htaccess = (file_exists('.htaccess') && filesize('.htaccess') > 0) ? 'true' : 'false';
+    $has_files_htaccess = (file_exists(STORAGE_PATH . '.htaccess') && filesize(STORAGE_PATH .'.htaccess') > 0) ? 'true' : 'false';
     $ini_file = php_ini_loaded_file();
     $upload_max_filesize = ini_get('upload_max_filesize');
     $post_max_size = ini_get('post_max_size');
@@ -423,7 +424,8 @@ function print_debug_info()
 <span>===============
 Debug Info
 ===============
-Has .htaccess: {$has_htaccess}
+Has root .htaccess: {$has_root_htaccess}
+Has files .htaccess: {$has_files_htaccess}
 php.ini: {$ini_file}
 upload_max_filesize: {$upload_max_filesize}
 post_max_size: {$post_max_size}
