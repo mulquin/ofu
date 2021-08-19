@@ -397,6 +397,12 @@ function print_retention_graph()
     return $graph;
 }
 
+// TODO: Purge old functions
+function purge_files()
+{
+    
+}
+
 function print_debug_info()
 {
     if (PRINT_DEBUG === false)
@@ -536,7 +542,10 @@ if (!is_valid_environment())
     exit;
 
 if (!is_uploading_file()) {
-    print_index();
+    if (php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'purge')
+        purge_files();
+    else
+        print_index();
 } else {
     $uploading_file = [];
     if (isset($_FILES['file']))
