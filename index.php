@@ -47,10 +47,6 @@ function is_valid_environment()
             serve_http_code(500);
             return false;
         }
-        if (!touch(STORAGE_PATH . 'index.html')) {
-            serve_http_code(500);
-            return false;
-        }
     }
 
     if (!is_writable(STORAGE_PATH)) {
@@ -58,6 +54,13 @@ function is_valid_environment()
         return false;
     }
 
+    if (!is_file(STORAGE_PATH . 'index.html')) {
+        if (!touch(STORAGE_PATH . 'index.html')) {
+            serve_http_code(500);
+            return false;
+        }
+    }
+    
     if (UPLOAD_LOG_PATH !== null || ERROR_LOG_PATH !== null) {
         $log_dir = dirname(UPLOAD_LOG_PATH);
         if (!is_dir($log_dir)) {
