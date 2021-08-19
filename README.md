@@ -3,7 +3,7 @@ One File Uploader -- A simple PHP uploading script
 
 In a similar vein to 0x0.st and 0x.at, this script can be used via curl.
 
-##.htaccess info
+## .htaccess info
 
 Root Directory:
 
