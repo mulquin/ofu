@@ -450,14 +450,15 @@ function print_index()
     $min_age = MIN_FILE_AGE;
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
-    $max_filesize_in_bytes = MAX_FILESIZE * 1024 * 1024;
     $upload_timeout = UPLOAD_TIMEOUT;
-    $retention_graph = implode(PHP_EOL, print_retention_graph());
-    $filetype_blocklist = wordwrap(implode(', ', FILETYPE_BLOCKLIST), 80, PHP_EOL);
     $admin_email = ADMIN_EMAIL;
     $decay_exponent = DECAY_EXPONENT;
+    
+    $filetype_blocklist = wordwrap(implode(', ', FILETYPE_BLOCKLIST), 80, PHP_EOL);
+
     $debug_info = print_debug_info();
 
+    $retention_graph = implode(PHP_EOL, print_retention_graph());
     $retention_example_filesize = (float) (rand(1, MAX_FILESIZE) . '.' . rand(0, 9));
     $retention_example = round(calculate_retention_age($retention_example_filesize),1);
 
