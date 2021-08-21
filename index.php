@@ -32,11 +32,14 @@ define('ADMIN_EMAIL', 'admin@email.com');
 
 function site_url()
 {
-    $url = 'http';
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        $url .= 's';   
-    $url .= '://' . $_SERVER['HTTP_HOST'] . '/';
-    return $url;
+    if (isset($_SERVER['HTTP_HOST'])) {
+        $url = 'http';
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            $url .= 's';   
+        $url .= '://' . $_SERVER['HTTP_HOST'] . '/';
+        return $url;
+    }
+    return 'http://localhost';
 }
 
 function mkdir_if_no_dir($path, $permissions=0750)
