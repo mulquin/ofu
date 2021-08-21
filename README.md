@@ -1,7 +1,9 @@
 # ofu
 One File Uploader -- A simple PHP uploading script
 
-In a similar vein to 0x0.st and 0x.at, this script can be used via curl.
+This is a fork of <a href="https://github.com/rouji/single_php_filehost">rouji/single_php_filehost</a>
+
+File validation code adapted from php.net answer by <a href="https://www.php.net/manual/en/features.file-upload.php#114004">CertaiN</a>
 
 ## .htaccess info
 

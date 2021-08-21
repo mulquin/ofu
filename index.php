@@ -528,14 +528,11 @@ retention = {$min_age} + ({$max_age} - {$min_age}) * (1 - ({$retention_example_f
           ≈ {$retention_example} days
 
 ===============
-Miscellanous
+Service Info
 ===============
 For early deletion or to report abuse, please send email to {$admin_email}
 
 The code for this script can be found on Github: <a href="https://github.com/mul91n/ofu">mul91n/ofu</a>
-
-This service was inspired by <a href="https://x0.at">x0.at</a> and <a href="0x0.st">0x0.st</a>
-File validation code adapted from php.net answer by <a href="https://www.php.net/manual/en/features.file-upload.php#114004">CertaiN</a>
 </pre>
 </body>
 </html>
