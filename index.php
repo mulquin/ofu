@@ -419,10 +419,45 @@ function print_retention_graph()
     return $graph;
 }
 
-// TODO: Purge old functions
 function purge_files()
 {
-    
+    $files_deleted = [];
+    foreach (scandir(STORAGE_PATH) as $filename) {
+        if ($filename === '.' || $filename === '..' || $filename === 'index.html')
+            continue;
+        
+        $file = STORAGE_PATH . $filename;
+        
+        $file_age = round((time() - filemtime($file)) / (60 * 60 * 24), 1);
+        if ($file_age < MIN_FILE_AGE)
+            continue;
+
+        $filesize = round(filesize($file) / (1024 * 1024),2);
+        $retention_age = calculate_retention_age($filesize);
+
+        if ($file_age > $retention_age) {
+            unlink($file);
+            $files_deleted[] = [
+                'filename' => $filename,
+                'filesize' => $filesize,
+                'file_age' => $file_age
+            ];
+            echo 'Deleted "'.$filename.'", ' . $filesize . ' MiB, ' . $file_age . ' days old' . PHP_EOL;
+        }
+    }
+
+    if (!empty($files_deleted) && PURGE_LOG_PATH !== null) {
+        $purge_log = '';
+        foreach ($files_deleted as $file) {
+            $purge_log .= implode("\t", [
+                            date('c'),
+                            $file['filename'],
+                            $file['filesize'],
+                            $file['file_age']
+                        ]) . PHP_EOL;
+        }
+        file_put_contents(PURGE_LOG_PATH, $purge_log, FILE_APPEND);
+    }    
 }
 
 function print_debug_info()
