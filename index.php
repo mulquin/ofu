@@ -46,7 +46,6 @@ function mkdir_if_no_dir($path, $permissions=0750)
 {
     if (!is_dir($path)) {
         if (!mkdir($path, $permissions)) {
-            serve_http_code(500);
             return false;
         }
     }
