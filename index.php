@@ -19,6 +19,7 @@ define('STORAGE_PATH', __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER);
 
 define('UPLOAD_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-upload.' . date('Y-m-d') . '.log');
 define('ERROR_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-error.' . date('Y-m-d') . '.log');
+define('PURGE_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-purge.' . date('Y-m-d') . '.log');
 
 define('FILETYPE_BLOCKLIST', [
     'application/x-dosexec', 'application/x-executable', 'application/x-hdf5', 
@@ -68,8 +69,22 @@ function is_valid_environment()
         }
     }
 
-    if (UPLOAD_LOG_PATH !== null || ERROR_LOG_PATH !== null) {
+    if (UPLOAD_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(UPLOAD_LOG_PATH))) {
+            serve_http_code(500);
+            return false;
+        }
+    }
+
+    if (ERROR_LOG_PATH !== null) {
+        if (!mkdir_if_no_dir(dirname(ERROR_LOG_PATH))) {
+            serve_http_code(500);
+            return false;
+        }
+    }
+
+    if (PURGE_LOG_PATH !== null) {
+        if (!mkdir_if_no_dir(dirname(PURGE_LOG_PATH))) {
             serve_http_code(500);
             return false;
         }
