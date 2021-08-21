@@ -38,13 +38,22 @@ function site_url()
     return $url;
 }
 
-function is_valid_environment()
+function mkdir_if_no_dir($path, $permissions=0750)
 {
-    if (!is_dir(STORAGE_PATH)) {
-        if (!mkdir(STORAGE_PATH, 0750)) {
+    if (!is_dir($path)) {
+        if (!mkdir($path, $permissions)) {
             serve_http_code(500);
             return false;
         }
+    }
+    return true;
+}
+
+function is_valid_environment()
+{
+    if (!mkdir_if_no_dir(STORAGE_PATH)) {
+        serve_http_code(500);
+        return false;
     }
 
     if (!is_writable(STORAGE_PATH)) {
@@ -60,12 +69,9 @@ function is_valid_environment()
     }
 
     if (UPLOAD_LOG_PATH !== null || ERROR_LOG_PATH !== null) {
-        $log_dir = dirname(UPLOAD_LOG_PATH);
-        if (!is_dir($log_dir)) {
-            if (!mkdir($log_dir, 0750)) {
-                serve_http_code(500);
-                return false;
-            }
+        if (!mkdir_if_no_dir(dirname(UPLOAD_LOG_PATH))) {
+            serve_http_code(500);
+            return false;
         }
     }
     
