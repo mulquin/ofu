@@ -55,39 +55,39 @@ function mkdir_if_no_dir($path, $permissions=0750)
 function is_valid_environment()
 {
     if (!mkdir_if_no_dir(STORAGE_PATH)) {
-        serve_http_code(500);
+        serve_http_code(500, 'Could not create "' . STORAGE_PATH.'"');
         return false;
     }
 
     if (!is_writable(STORAGE_PATH)) {
-        serve_http_code(500);
+        serve_http_code(500, '"'.STORAGE_PATH.'" not writable');
         return false;
     }
 
     if (!is_file(STORAGE_PATH . 'index.html')) {
         if (!touch(STORAGE_PATH . 'index.html')) {
-            serve_http_code(500);
+            serve_http_code(500, 'Could not create "'.STORAGE_PATH . 'index.html'.'"');
             return false;
         }
     }
 
     if (UPLOAD_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(UPLOAD_LOG_PATH))) {
-            serve_http_code(500);
+            serve_http_code(500, 'Could not create "'.UPLOAD_LOG_PATH.'"');
             return false;
         }
     }
 
     if (ERROR_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(ERROR_LOG_PATH))) {
-            serve_http_code(500);
+            serve_http_code(500, 'Could not create "'.ERROR_LOG_PATH.'"');
             return false;
         }
     }
 
     if (PURGE_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(PURGE_LOG_PATH))) {
-            serve_http_code(500);
+            serve_http_code(500, 'Could not create "'.PURGE_LOG_PATH.'"');
             return false;
         }
     }
@@ -107,8 +107,6 @@ function serve_http_code($code, $message = '')
     if (!in_array($code, array_keys($default_code_message)))
         $code = 500;
 
-    header('HTTP/1.1 ' . $code . ' ' . $default_code_message[$code]);
-
     if ($message === '')
         $message = $default_code_message[$code];
 
@@ -124,7 +122,11 @@ function serve_http_code($code, $message = '')
             FILE_APPEND
         );
     }
-    
+
+    if ($code === 500 || $code === 520)
+        $message = $default_code_message[$code];
+
+    header('HTTP/1.1 ' . $code . ' ' . $default_code_message[$code]);
     echo 'Error ' . $code . ': ' . $message . PHP_EOL;
 }
 
@@ -147,7 +149,7 @@ function has_uploaded_valid_file($file = [])
     }
 
     if (!isset($file['error']) || is_array($file['error'])) {
-        serve_http_code(500);
+        serve_http_code(500, 'Strange or missing $_FILES["error"] element');
         return false;
     }
 
@@ -163,7 +165,7 @@ function has_uploaded_valid_file($file = [])
             serve_http_code(413, "Max file size (" . MAX_FILESIZE . " MiB) exceeded");
             return false;
         default:
-            serve_http_code(520);
+            serve_http_code(520, 'Unknown $file["error"]: ' . json_encode($file['error']));
             return false;
             break;
     }
@@ -246,7 +248,7 @@ function save_file($file)
     $moved_file = move_uploaded_file($file['tmp_name'], $target_path);
 
     if (!$moved_file) {
-        serve_http_code(520);
+        serve_http_code(520, 'Could not move file: ' . json_encode($file['tmp_name']));
         return;
     }
 
