@@ -12,8 +12,6 @@ define('GRAPH_ROWS', 30);
 
 define('DECAY_EXPONENT', 3); // Exponent to modify retention algo. Larger numbers punish large files
 
-define('UPLOAD_TIMEOUT', ini_get('max_input_time')); // Number of seconds before script times out
-
 define('RANDOM_FILENAME_LENGTH', 4); // Length of random filename
 
 define('STORAGE_FOLDER', 'files' . DIRECTORY_SEPARATOR);
@@ -450,7 +448,7 @@ function print_index()
     $min_age = MIN_FILE_AGE;
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
-    $upload_timeout = UPLOAD_TIMEOUT;
+    $upload_timeout = ini_get('max_input_time');
     $admin_email = ADMIN_EMAIL;
     $decay_exponent = DECAY_EXPONENT;
     
