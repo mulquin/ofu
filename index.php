@@ -165,14 +165,33 @@ function has_uploaded_valid_file($file = [])
     switch ($file['error']) {
         case UPLOAD_ERR_OK:
             break;
+        case UPLOAD_ERR_INI_SIZE:
+            serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
+            return false;
+            break;
+        case UPLOAD_ERR_FORM_SIZE:
+            return false;
+            break;
+        case UPLOAD_ERR_PARTIAL:
+            serve_http_code(400, 'File was only partially uploaded');
+            return false;
+            break;
         case UPLOAD_ERR_NO_FILE:
             serve_http_code(400, 'No file uploaded');
             return false;
             break;
-        case UPLOAD_ERR_INI_SIZE:
-        case UPLOAD_ERR_FORM_SIZE:
-            serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
+        case UPLOAD_ERR_NO_TMP_DIR:
+            serve_http_code(500, 'Missing temporary folder');
             return false;
+            break;
+        case UPLOAD_ERR_CANT_WRITE:
+            serve_http_code(500, 'Failed to write to disk');
+            return false;
+            break;
+        case UPLOAD_ERR_EXTENSION:
+            serve_http_code(500, 'A PHP extension stopped the file upload');
+            return false;
+            break;
         default:
             serve_http_code(520, 'Unknown $file["error"]: ' . json_encode($file));
             return false;
