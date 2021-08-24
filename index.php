@@ -170,6 +170,7 @@ function has_uploaded_valid_file($file = [])
             return false;
             break;
         case UPLOAD_ERR_FORM_SIZE:
+            serve_http_code(413, 'File is larger than form value MAX_FILE_SIZE ('.$_POST['MAX_FILE_SIZE'].')');
             return false;
             break;
         case UPLOAD_ERR_PARTIAL:
@@ -536,6 +537,7 @@ function print_index()
     $min_age = MIN_FILE_AGE;
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
+    $max_filesize_in_bytes = MAX_FILESIZE * 1024 * 1024;
     $upload_timeout = ini_get('max_input_time');
     $admin_email = ADMIN_EMAIL;
     $decay_exponent = DECAY_EXPONENT;
@@ -594,6 +596,7 @@ You can upload files via simple HTTP POST requests, e.g. using curl:
 Or you can use the form below:
 </pre>
 <form id="ofu" method="post" enctype="multipart/form-data">
+<input type="hidden" name="MAX_FILE_SIZE" value="{$max_filesize_in_bytes}" />
 <input type="file" name="file" id="file" />
 <input type="submit" value="Upload" />
 </form>
