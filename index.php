@@ -41,7 +41,7 @@ function site_url()
     }
 }
 
-function mkdir_if_no_dir($path, $permissions=0750)
+function mkdir_if_no_dir($path, $permissions = 0750)
 {
     if (!is_dir($path)) {
         if (!mkdir($path, $permissions)) {
@@ -65,28 +65,28 @@ function is_valid_environment()
 
     if (!is_file(STORAGE_PATH . 'index.html')) {
         if (!touch(STORAGE_PATH . 'index.html')) {
-            serve_http_code(500, 'Could not create "'.STORAGE_PATH . 'index.html'.'"');
+            serve_http_code(500, 'Could not create "' . STORAGE_PATH . 'index.html"');
             return false;
         }
     }
 
     if (UPLOAD_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(UPLOAD_LOG_PATH))) {
-            serve_http_code(500, 'Could not create "'.UPLOAD_LOG_PATH.'"');
+            serve_http_code(500, 'Could not create "' . UPLOAD_LOG_PATH . '"');
             return false;
         }
     }
 
     if (ERROR_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(ERROR_LOG_PATH))) {
-            serve_http_code(500, 'Could not create "'.ERROR_LOG_PATH.'"');
+            serve_http_code(500, 'Could not create "' . ERROR_LOG_PATH . '"');
             return false;
         }
     }
 
     if (PURGE_LOG_PATH !== null) {
         if (!mkdir_if_no_dir(dirname(PURGE_LOG_PATH))) {
-            serve_http_code(500, 'Could not create "'.PURGE_LOG_PATH.'"');
+            serve_http_code(500, 'Could not create "' . PURGE_LOG_PATH . '"');
             return false;
         }
     }
@@ -143,12 +143,12 @@ function is_uploading_file()
 function has_uploaded_valid_file($file = [])
 {
     if (empty($file) && $_SERVER['CONTENT_LENGTH'] > 0) {
-        serve_http_code(413, "Max file size (" . MAX_FILESIZE . " MiB) exceeded");
+        serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
         return false;
     }
 
     if (empty($file)) {
-        serve_http_code(400, "No file uploaded");
+        serve_http_code(400, 'No file uploaded');
         return false;       
     }
 
@@ -166,12 +166,12 @@ function has_uploaded_valid_file($file = [])
         case UPLOAD_ERR_OK:
             break;
         case UPLOAD_ERR_NO_FILE:
-            serve_http_code(400, "No file uploaded");
+            serve_http_code(400, 'No file uploaded');
             return false;
             break;
         case UPLOAD_ERR_INI_SIZE:
         case UPLOAD_ERR_FORM_SIZE:
-            serve_http_code(413, "Max file size (" . MAX_FILESIZE . " MiB) exceeded");
+            serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
             return false;
         default:
             serve_http_code(520, 'Unknown $file["error"]: ' . json_encode($file));
@@ -182,7 +182,7 @@ function has_uploaded_valid_file($file = [])
     $filesize = filesize($file['tmp_name']);
 
     if ($filesize === 0) {
-        serve_http_code(400, "Uploaded file is empty");
+        serve_http_code(400, 'Uploaded file is empty');
         return false;
     }
 
@@ -192,14 +192,14 @@ function has_uploaded_valid_file($file = [])
     }
 
     if ($filesize > MAX_FILESIZE * 1024 * 1024) {
-        serve_http_code(413, "Max file size (" . MAX_FILESIZE . " MiB) exceeded");
+        serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
         return false;
     }
 
     $is_valid_file_type_or_file_type = is_valid_file_type_or_file_type($file['tmp_name']);
 
     if ($is_valid_file_type_or_file_type !== true) {
-        serve_http_code(400, "Invalid file type (".$is_valid_file_type_or_file_type.")");
+        serve_http_code(400, 'Invalid file type (' . $is_valid_file_type_or_file_type . ')');
         return false;
     }
     
@@ -227,12 +227,12 @@ function get_file_extension($filename)
     $extension2 = pathinfo(substr($filename,0,-(strlen($extension)+1)), PATHINFO_EXTENSION);
 
     if ($extension2 === 'tar')
-        $extension = $extension2.'.'.$extension;
+        $extension = $extension2 . '.' . $extension;
 
     if (strlen($extension) > 10)
         $extension = substr($extension, 0, 10);
 
-    return '.'.$extension;
+    return '.' . $extension;
 }
 
 function save_file($file)
@@ -455,7 +455,7 @@ function purge_files()
                 'filesize' => $filesize,
                 'file_age' => $file_age
             ];
-            echo 'Deleted "'.$filename.'", ' . $filesize . ' MiB, ' . $file_age . ' days old' . PHP_EOL;
+            echo 'Deleted "' . $filename . '", ' . $filesize . ' MiB, ' . $file_age . ' days old' . PHP_EOL;
         }
     }
 
