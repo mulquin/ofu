@@ -158,7 +158,7 @@ function has_uploaded_valid_file($file = [])
     }
 
     if (is_array($file['error'])) {
-        serve_http_code(500, 'Strange $file["error"] element: ' . json_encode($file['error']));
+        serve_http_code(500, 'Strange $file["error"] element: ' . json_encode($file));
         return false;        
     }
 
@@ -174,7 +174,7 @@ function has_uploaded_valid_file($file = [])
             serve_http_code(413, "Max file size (" . MAX_FILESIZE . " MiB) exceeded");
             return false;
         default:
-            serve_http_code(520, 'Unknown $file["error"]: ' . json_encode($file['error']));
+            serve_http_code(520, 'Unknown $file["error"]: ' . json_encode($file));
             return false;
             break;
     }
