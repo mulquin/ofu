@@ -39,7 +39,6 @@ function site_url()
         $url .= '://' . $_SERVER['HTTP_HOST'] . '/';
         return $url;
     }
-    return 'http://localhost';
 }
 
 function mkdir_if_no_dir($path, $permissions=0750)
