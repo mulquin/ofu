@@ -257,7 +257,7 @@ function save_file($file)
     $moved_file = move_uploaded_file($file['tmp_name'], $target_path);
 
     if (!$moved_file) {
-        serve_http_code(520, 'Could not move file: ' . json_encode($file['tmp_name']));
+        serve_http_code(520, 'Could not move file: ' . json_encode($file));
         return;
     }
 
