@@ -147,9 +147,19 @@ function has_uploaded_valid_file($file = [])
         return false;
     }
 
-    if (!isset($file['error']) || is_array($file['error'])) {
-        serve_http_code(500, 'Strange or missing $_FILES["error"] element');
+    if (empty($file)) {
+        serve_http_code(400, "No file uploaded");
+        return false;       
+    }
+
+    if (!isset($file['error'])) {
+        serve_http_code(500, 'Missing $file["error"] element');
         return false;
+    }
+
+    if (is_array($file['error'])) {
+        serve_http_code(500, 'Strange $file["error"] element: ' . json_encode($file['error']));
+        return false;        
     }
 
     switch ($file['error']) {
