@@ -1,34 +1,34 @@
 <?php
 
-define('PRINT_DEBUG', false); // Show debug info on the index page
+const PRINT_DEBUG = false; // Show debug info on the index page
 
 define('MAX_FILESIZE', intval(ini_get('upload_max_filesize'))); // Filesize in MiB
+const MAX_FILE_AGE = 365; // Max days in age
+const MIN_FILE_AGE = 7; // Min days in age
 
-define('MAX_FILE_AGE', 365); // Max days in age
-define('MIN_FILE_AGE', 7); // Min days in age
+const GRAPH_COLS = 80; // Width of graph (not including borders / legend)
+const GRAPH_ROWS = 30;
 
-define('GRAPH_COLS', 80); // Width of graph (not including borders / legend)
-define('GRAPH_ROWS', 30);
+const DECAY_EXPONENT = 3; // Exponent to modify retention algo. Larger numbers punish large files
 
-define('DECAY_EXPONENT', 3); // Exponent to modify retention algo. Larger numbers punish large files
+const RANDOM_FILENAME_LENGTH = 4; // Length of random filename
 
-define('RANDOM_FILENAME_LENGTH', 4); // Length of random filename
-
-define('STORAGE_FOLDER', 'files' . DIRECTORY_SEPARATOR);
-define('STORAGE_PATH', __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER);
+const STORAGE_FOLDER = 'files' . DIRECTORY_SEPARATOR;
+const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER;
 
 define('UPLOAD_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-upload.' . date('Y-m-d') . '.log');
 define('ERROR_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-error.' . date('Y-m-d') . '.log');
 define('PURGE_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-purge.' . date('Y-m-d') . '.log');
 
-define('FILETYPE_BLOCKLIST', [
+const FILETYPE_BLOCKLIST = [
     'application/x-dosexec', 'application/x-executable', 'application/x-hdf5', 
     'application/java-archive', 'application/java-vm', 
     'application/vnd.android.package-archive'
-]);
+];
+
+const ADMIN_EMAIL = 'admin@email.com';
 
 define('SITE_URL', site_url());
-define('ADMIN_EMAIL', 'admin@email.com');
 
 function site_url()
 {
@@ -497,7 +497,7 @@ function calculate_retention_age($filesize)
 {
     return MIN_FILE_AGE +
             (MAX_FILE_AGE - MIN_FILE_AGE) *
-            pow(1 - ($filesize / MAX_FILESIZE),DECAY_EXPONENT);
+            pow(1 - ($filesize / MAX_FILESIZE), DECAY_EXPONENT);
 }
 
 function print_debug_info()
