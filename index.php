@@ -30,7 +30,7 @@ const ADMIN_EMAIL = 'admin@email.com';
 
 define('SITE_URL', site_url());
 
-function site_url()
+function site_url(): string
 {
     if (isset($_SERVER['HTTP_HOST'])) {
         $protocol = 'http';
@@ -40,7 +40,7 @@ function site_url()
     }
 }
 
-function mkdir_if_no_dir($path, $permissions = 0750)
+function mkdir_if_no_dir($path, $permissions = 0750): bool
 {
     if (!is_dir($path)) {
         if (!mkdir($path, $permissions)) {
@@ -50,7 +50,7 @@ function mkdir_if_no_dir($path, $permissions = 0750)
     return true;
 }
 
-function is_valid_environment()
+function is_valid_environment(): bool
 {
     if (!mkdir_if_no_dir(STORAGE_PATH)) {
         serve_http_code(500, 'Could not create "' . STORAGE_PATH . '"');
@@ -93,7 +93,7 @@ function is_valid_environment()
     return true;
 }
 
-function serve_http_code($code, $message = '')
+function serve_http_code($code, $message = ''): void
 {
     $default_code_message = [
         400 => 'Bad Request',
@@ -128,7 +128,7 @@ function serve_http_code($code, $message = '')
     echo 'Error ' . $code . ': ' . $message . PHP_EOL;
 }
 
-function is_uploading_file()
+function is_uploading_file(): bool
 {
     if (empty($_FILES) && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 0) // For files larger than ini
         return true;
@@ -139,7 +139,7 @@ function is_uploading_file()
     return false;
 }
 
-function has_uploaded_valid_file($file = [])
+function has_uploaded_valid_file($file = []): bool
 {
     if (empty($file) && $_SERVER['CONTENT_LENGTH'] > 0) {
         serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
@@ -226,13 +226,13 @@ function has_uploaded_valid_file($file = [])
     return true;
 }
 
-function get_file_type($file)
+function get_file_type($file): string
 {
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     return $finfo->file($file);
 }
 
-function is_valid_file_type($file_type)
+function is_valid_file_type($file_type): bool
 {
     $search = array_search($file_type, FILETYPE_BLOCKLIST, true);
     if ($search === false)
@@ -240,7 +240,7 @@ function is_valid_file_type($file_type)
     return false;
 }
 
-function get_file_extension($filename)
+function get_file_extension($filename): string
 {
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
@@ -259,7 +259,7 @@ function get_file_extension($filename)
     return '.' . $extension;
 }
 
-function save_file($file)
+function save_file($file): void
 {   
     $extension = get_file_extension($file['name']);
 
@@ -306,7 +306,7 @@ function save_file($file)
     echo $url . PHP_EOL;
 }
 
-function random_string($length)
+function random_string($length): string
 {
     $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     $size = strlen($chars) - 1;
@@ -317,7 +317,7 @@ function random_string($length)
     return $string;
 }
 
-function print_retention_graph()
+function print_retention_graph(): array
 {
     $symbols = [
         'vertical' => '│',
@@ -456,7 +456,7 @@ function print_retention_graph()
     return $graph;
 }
 
-function purge_files()
+function purge_files(): void
 {
     $files_deleted = [];
     foreach (scandir(STORAGE_PATH) as $filename) {
@@ -497,14 +497,14 @@ function purge_files()
     }    
 }
 
-function calculate_retention_age($filesize)
+function calculate_retention_age($filesize): float
 {
     return MIN_FILE_AGE +
             (MAX_FILE_AGE - MIN_FILE_AGE) *
             pow(1 - ($filesize / MAX_FILESIZE), DECAY_EXPONENT);
 }
 
-function print_debug_info()
+function print_debug_info(): string
 {
     if (PRINT_DEBUG === false)
         return '';
@@ -535,7 +535,7 @@ Constants:
 DEBUG;    
 }
 
-function print_index()
+function print_index(): void
 {
     $site_url = SITE_URL;
     $min_age = MIN_FILE_AGE;
