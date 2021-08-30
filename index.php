@@ -317,7 +317,7 @@ function random_string($length): string
     return $string;
 }
 
-function print_retention_graph(): array
+function create_retention_graph(): array
 {
     $symbols = [
         'vertical' => '│',
@@ -550,7 +550,7 @@ function print_index(): void
 
     $debug_info = print_debug_info();
 
-    $retention_graph = implode(PHP_EOL, print_retention_graph());
+    $retention_graph = implode(PHP_EOL, create_retention_graph());
     $retention_example_filesize = (float) (rand(1, MAX_FILESIZE) . '.' . rand(0, 9));
     $retention_example = round(calculate_retention_age($retention_example_filesize),1);
 
