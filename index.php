@@ -54,12 +54,12 @@ function mkdir_if_no_dir($path, $permissions = 0750)
 function is_valid_environment()
 {
     if (!mkdir_if_no_dir(STORAGE_PATH)) {
-        serve_http_code(500, 'Could not create "' . STORAGE_PATH.'"');
+        serve_http_code(500, 'Could not create "' . STORAGE_PATH . '"');
         return false;
     }
 
     if (!is_writable(STORAGE_PATH)) {
-        serve_http_code(500, '"'.STORAGE_PATH.'" not writable');
+        serve_http_code(500, '"' . STORAGE_PATH . '" not writable');
         return false;
     }
 
@@ -170,7 +170,7 @@ function has_uploaded_valid_file($file = [])
             return false;
             break;
         case UPLOAD_ERR_FORM_SIZE:
-            serve_http_code(413, 'File is larger than form value MAX_FILE_SIZE ('.$_POST['MAX_FILE_SIZE'].')');
+            serve_http_code(413, 'File is larger than form value MAX_FILE_SIZE (' . $_POST['MAX_FILE_SIZE'] . ')');
             return false;
             break;
         case UPLOAD_ERR_PARTIAL:
@@ -380,7 +380,7 @@ function print_retention_graph()
         */
 
         // x values need to be shunted over to accomodate y-axis legend
-        $points[($x_val + $x_offset).','.$y_val] = ''; 
+        $points[($x_val + $x_offset) . ',' . $y_val] = ''; 
     }
 
     $max_x_length = strlen($max_x);
@@ -430,7 +430,7 @@ function print_retention_graph()
                     $graph[$y] .= $symbols['horizontal'];
                 else if ($y > 1 && ($x == $x_offset+1 || $x == $cols-1))
                     $graph[$y] .= $symbols['vertical'];
-                else if (isset($points[$x.','.$y])) // the graph itself
+                else if (isset($points[$x . ',' . $y])) // the graph itself
                     $graph[$y] .= $symbols['point'];
                 else if ($y == round($rows / 2))
                     $graph[$y] .= '-';
@@ -493,13 +493,20 @@ function purge_files()
     }    
 }
 
+function calculate_retention_age($filesize)
+{
+    return MIN_FILE_AGE +
+            (MAX_FILE_AGE - MIN_FILE_AGE) *
+            pow(1 - ($filesize / MAX_FILESIZE),DECAY_EXPONENT);
+}
+
 function print_debug_info()
 {
     if (PRINT_DEBUG === false)
         return '';
     
     $has_root_htaccess = (file_exists('.htaccess') && filesize('.htaccess') > 0) ? 'true' : 'false';
-    $has_files_htaccess = (file_exists(STORAGE_PATH . '.htaccess') && filesize(STORAGE_PATH .'.htaccess') > 0) ? 'true' : 'false';
+    $has_files_htaccess = (file_exists(STORAGE_PATH . '.htaccess') && filesize(STORAGE_PATH . '.htaccess') > 0) ? 'true' : 'false';
     $ini_file = php_ini_loaded_file();
     $upload_max_filesize = ini_get('upload_max_filesize');
     $post_max_size = ini_get('post_max_size');
@@ -522,13 +529,6 @@ max_execution_time: {$max_execution_time}
 Constants:
 {$user_constants}</span>
 DEBUG;    
-}
-
-function calculate_retention_age($filesize)
-{
-    return MIN_FILE_AGE +
-            (MAX_FILE_AGE - MIN_FILE_AGE) *
-            pow(1 - ($filesize / MAX_FILESIZE),DECAY_EXPONENT);
 }
 
 function print_index()
