@@ -33,11 +33,10 @@ define('SITE_URL', site_url());
 function site_url()
 {
     if (isset($_SERVER['HTTP_HOST'])) {
-        $url = 'http';
+        $protocol = 'http';
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            $url .= 's';   
-        $url .= '://' . $_SERVER['HTTP_HOST'] . '/';
-        return $url;
+            $protocol .= 's';
+        return $protocol . '://' . $_SERVER['HTTP_HOST'] . '/';
     }
 }
 
