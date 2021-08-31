@@ -30,6 +30,9 @@ const ADMIN_EMAIL = 'admin@email.com';
 
 define('SITE_URL', site_url());
 
+const AUTH_USER = 'username'; // Both user and pass must not be null for basic authentication
+const AUTH_PW = null; 
+
 function site_url(): string
 {
     if (isset($_SERVER['HTTP_HOST'])) {
@@ -97,6 +100,7 @@ function serve_http_code($code, $message = ''): void
 {
     $default_code_message = [
         400 => 'Bad Request',
+        401 => 'Authorization Required',
         413 => 'Payload Too Large',
         500 => 'Internal Server Error',
         520 => 'Unknown Error'
@@ -125,6 +129,10 @@ function serve_http_code($code, $message = ''): void
         $message = $default_code_message[$code];
 
     header('HTTP/1.1 ' . $code . ' ' . $default_code_message[$code]);
+
+    if ($code === 401)
+        header('WWW-Authenticate: Basic realm="Access denied"');
+
     echo 'Error ' . $code . ': ' . $message . PHP_EOL;
 }
 
@@ -554,6 +562,11 @@ function print_index(): void
     $retention_example_filesize = (float) (rand(1, MAX_FILESIZE) . '.' . rand(0, 9));
     $retention_example = round(calculate_retention_age($retention_example_filesize),1);
 
+    if (AUTH_USER !== null && AUTH_PW !== null)
+        $curl_cmd = 'curl -u ' . AUTH_USER . ':' . AUTH_PW . ' -F';
+    else
+        $curl_cmd = 'curl -F';
+
 echo <<<INDEX
 <!doctype html>
 <html lang="en">
@@ -595,7 +608,7 @@ Blocked filetypes:
 How to Upload
 ===============
 You can upload files via simple HTTP POST requests, e.g. using curl:
-  curl -F "file=@yourfile.png" {$site_url}
+  {$curl_cmd} "file=@yourfile.png" {$site_url}
 
 Or you can use the form below:
 </pre>
@@ -634,6 +647,23 @@ The code for this script can be found on Github: <a href="https://github.com/mul
 INDEX;
 }
 
+function basic_auth(): void
+{
+    if (AUTH_USER === null || AUTH_PW === null)
+        return;
+    
+    header('Cache-Control: no-cache, must-revalidate, max-age=0');
+
+    $has_credentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
+
+    $is_authenticated = ($has_credentials && $_SERVER['PHP_AUTH_USER'] === AUTH_USER && $_SERVER['PHP_AUTH_PW'] === AUTH_PW);
+
+    if (!$is_authenticated) {
+        serve_http_code(401);
+        exit;
+    }   
+}
+
 if (!is_valid_environment())
     exit;
 
@@ -641,6 +671,7 @@ if (!is_uploading_file()) {
     if (php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'purge')
         purge_files();
     else
+        basic_auth();
         print_index();
 } else {
     $uploading_file = [];
