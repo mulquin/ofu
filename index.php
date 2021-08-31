@@ -16,9 +16,10 @@ const RANDOM_FILENAME_LENGTH = 4; // Length of random filename
 const STORAGE_FOLDER = 'files' . DIRECTORY_SEPARATOR;
 const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER;
 
-define('UPLOAD_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-upload.' . date('Y-m-d') . '.log');
-define('ERROR_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-error.' . date('Y-m-d') . '.log');
-define('PURGE_LOG_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'ofu-purge.' . date('Y-m-d') . '.log');
+define('LOG_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR);
+define('UPLOAD_LOG_PATH', LOG_DIR . 'ofu-upload.' . date('Y-m-d') . '.log');
+define('ERROR_LOG_PATH', LOG_DIR . 'ofu-error.' . date('Y-m-d') . '.log');
+define('PURGE_LOG_PATH', LOG_DIR . 'ofu-purge.' . date('Y-m-d') . '.log');
 
 const FILETYPE_BLOCKLIST = [
     'application/x-dosexec', 'application/x-executable', 'application/x-hdf5', 
@@ -581,11 +582,11 @@ a { color: red; }
 a:hover { color: tomato; }
 @keyframes flash-red { 50% { color: red; } }
 strong > span {
-    animation: flash-red 2.5s infinite;
+    animation: flash-red 3.5s infinite;
     animation-timing-function: step-end;
 }
-strong > span:nth-child(2) { animation-delay: 0.83s; }
-strong > span:nth-child(3) { animation-delay: 1.66s; }
+strong > span:nth-child(2) { animation-delay: 1.166s; }
+strong > span:nth-child(3) { animation-delay: 2.323s; }
 pre > span { color: red; }
 </style>
 </head>
