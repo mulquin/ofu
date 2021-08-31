@@ -5,6 +5,8 @@ This is a fork of <a href="https://github.com/rouji/single_php_filehost">rouji/s
 
 File validation code adapted from php.net answer by <a href="https://www.php.net/manual/en/features.file-upload.php#114004">CertaiN</a>
 
+HTTP Basic Auth code adapted from Gist by <a href="https://gist.github.com/westonruter/3131129">westonruter</a>
+
 ## .htaccess info
 
 Root Directory:
