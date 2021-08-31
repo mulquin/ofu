@@ -130,7 +130,7 @@ function serve_http_code($code, $message = ''): void
     if ($message === '')
         $message = $default_code_message[$code];
 
-    if (ERROR_LOG_PATH !== null) {
+    if (ERROR_LOG_PATH !== null && $code !== 401) {
         file_put_contents(
             ERROR_LOG_PATH,
             implode("\t", [
