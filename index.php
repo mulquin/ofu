@@ -97,6 +97,23 @@ function is_valid_environment(): bool
     return true;
 }
 
+function basic_auth(): void
+{
+    if (AUTH_USER === null || AUTH_PW === null)
+        return;
+    
+    header('Cache-Control: no-cache, must-revalidate, max-age=0');
+
+    $has_credentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
+
+    $is_authenticated = ($has_credentials && $_SERVER['PHP_AUTH_USER'] === AUTH_USER && $_SERVER['PHP_AUTH_PW'] === AUTH_PW);
+
+    if (!$is_authenticated) {
+        serve_http_code(401);
+        exit;
+    }   
+}
+
 function serve_http_code($code, $message = ''): void
 {
     $default_code_message = [
@@ -646,23 +663,6 @@ The code for this script can be found on Github: <a href="https://github.com/mul
 </body>
 </html>
 INDEX;
-}
-
-function basic_auth(): void
-{
-    if (AUTH_USER === null || AUTH_PW === null)
-        return;
-    
-    header('Cache-Control: no-cache, must-revalidate, max-age=0');
-
-    $has_credentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
-
-    $is_authenticated = ($has_credentials && $_SERVER['PHP_AUTH_USER'] === AUTH_USER && $_SERVER['PHP_AUTH_PW'] === AUTH_PW);
-
-    if (!$is_authenticated) {
-        serve_http_code(401);
-        exit;
-    }   
 }
 
 if (!is_valid_environment())
