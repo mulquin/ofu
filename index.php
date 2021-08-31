@@ -668,11 +668,12 @@ if (!is_valid_environment())
     exit;
 
 if (!is_uploading_file()) {
-    if (php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'purge')
+    if (php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'purge') {
         purge_files();
-    else
+    } else {
         basic_auth();
         print_index();
+    }
 } else {
     $uploading_file = [];
     if (isset($_FILES['file']))
