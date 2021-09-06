@@ -29,8 +29,6 @@ const FILETYPE_BLOCKLIST = [
 
 const ADMIN_EMAIL = 'admin@email.com';
 
-define('SITE_URL', site_url());
-
 const AUTH_USER = 'username'; // Both user and pass must not be null for basic authentication
 const AUTH_PW = null; 
 
@@ -327,7 +325,7 @@ function save_file($file): void
         );
     }
 
-    $url = SITE_URL . STORAGE_FOLDER . $filename;
+    $url = site_url() . STORAGE_FOLDER . $filename;
 
     echo $url . PHP_EOL;
 }
@@ -563,7 +561,7 @@ DEBUG;
 
 function print_index(): void
 {
-    $site_url = SITE_URL;
+    $site_url = site_url();
     $min_age = MIN_FILE_AGE;
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
