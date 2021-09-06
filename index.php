@@ -164,7 +164,7 @@ function is_uploading_file(): bool
     return false;
 }
 
-function has_uploaded_valid_file($file = []): bool
+function has_uploaded_valid_file($file): bool
 {
     if (empty($file) && $_SERVER['CONTENT_LENGTH'] > 0) {
         serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
