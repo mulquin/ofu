@@ -29,6 +29,7 @@ const FILETYPE_BLOCKLIST = [
 
 const ADMIN_EMAIL = 'admin@email.com';
 
+const AUTH_REALM = 'Access denied';
 const AUTH_USER = 'username'; // Both user and pass must not be null for basic authentication
 const AUTH_PW = null; 
 
@@ -147,7 +148,7 @@ function serve_http_code($code, $message = ''): void
     header('HTTP/1.1 ' . $code . ' ' . $default_code_message[$code]);
 
     if ($code === 401)
-        header('WWW-Authenticate: Basic realm="Access denied"');
+        header('WWW-Authenticate: Basic realm="' . AUTH_REALM . '"');
 
     echo 'Error ' . $code . ': ' . $message . PHP_EOL;
 }
