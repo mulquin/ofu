@@ -13,8 +13,7 @@ const DECAY_EXPONENT = 3; // Exponent to modify retention algo. Larger numbers p
 
 const RANDOM_FILENAME_LENGTH = 4; // Length of random filename
 
-const STORAGE_FOLDER = 'files' . DIRECTORY_SEPARATOR;
-const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER;
+const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
 
 define('TODAY_DATE', date('Y-m-d'));
 define('LOG_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR);
@@ -327,7 +326,7 @@ function save_file($file): void
         );
     }
 
-    $url = site_url() . STORAGE_FOLDER . $filename;
+    $url = site_url() . $filename;
 
     echo $url . PHP_EOL;
 }

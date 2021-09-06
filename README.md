@@ -14,6 +14,11 @@ Root Directory:
 ```
 Options -FollowSymLinks -MultiViews -Indexes
 AddDefaultCharset UTF-8
+
+RewriteEngine On
+RewriteCond "%{ENV:REDIRECT_STATUS}" "^$"
+RewriteRule "^/?$" "index.php" [L,END]
+RewriteRule "^(.+)$" "files/$1" [L,END]
 ```
 
 
@@ -23,5 +28,5 @@ Files Directory
 Options -ExecCGI -FollowSymLinks -MultiViews -Indexes
 php_flag engine off
 SetHandler None
-AddType text/plain .php .php5 .html .htm .cpp .c .h .sh .cmd .bat
+AddType text/plain .php .php5 .html .htm .cpp .c .h .sh .cmd .bat .jar
 ```
