@@ -16,10 +16,11 @@ const RANDOM_FILENAME_LENGTH = 4; // Length of random filename
 const STORAGE_FOLDER = 'files' . DIRECTORY_SEPARATOR;
 const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . STORAGE_FOLDER;
 
+define('TODAY_DATE', date('Y-m-d'));
 define('LOG_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR);
-define('UPLOAD_LOG_PATH', LOG_DIR . 'ofu-upload.' . date('Y-m-d') . '.log');
-define('ERROR_LOG_PATH', LOG_DIR . 'ofu-error.' . date('Y-m-d') . '.log');
-define('PURGE_LOG_PATH', LOG_DIR . 'ofu-purge.' . date('Y-m-d') . '.log');
+const UPLOAD_LOG_PATH = LOG_DIR . 'ofu-upload.' . TODAY_DATE . '.log';
+const ERROR_LOG_PATH = LOG_DIR . 'ofu-error.' . TODAY_DATE . '.log';
+const PURGE_LOG_PATH = LOG_DIR . 'ofu-purge.' . TODAY_DATE . '.log';
 
 const FILETYPE_BLOCKLIST = [
     'application/x-dosexec', 'application/x-executable', 'application/x-hdf5', 
