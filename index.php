@@ -676,6 +676,7 @@ if (!is_uploading_file()) {
     }
 } else {
     $uploading_file = [];
+    basic_auth();
     if (isset($_FILES['file']))
         $uploading_file = $_FILES['file'];
 
