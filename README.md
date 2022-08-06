@@ -28,5 +28,10 @@ Files Directory
 Options -ExecCGI -FollowSymLinks -MultiViews -Indexes
 php_flag engine off
 SetHandler None
-AddType text/plain .php .php5 .html .htm .cpp .c .h .sh .cmd .bat .jar
+AddType text/plain .php .php5 .phtml .html .htm .cpp .c .h .sh .cmd .bat .jar
 ```
+
+## Secure file upload resources
+
+* https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
+* https://paragonie.com/blog/2015/10/how-securely-allow-users-upload-files
