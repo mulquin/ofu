@@ -43,7 +43,7 @@ function site_url(): string
     }
 }
 
-function mkdir_if_no_dir($path, $permissions = 0750): bool
+function mkdir_if_no_dir(string $path, int $permissions = 0750): bool
 {
     if (!is_dir($path)) {
         if (!mkdir($path, $permissions)) {
@@ -113,7 +113,7 @@ function basic_auth(): void
     }   
 }
 
-function serve_http_code($code, $message = ''): void
+function serve_http_code(int $code, string $message = ''): void
 {
     $default_code_message = [
         400 => 'Bad Request',
@@ -164,7 +164,7 @@ function is_uploading_file(): bool
     return false;
 }
 
-function has_uploaded_valid_file($file): bool
+function has_uploaded_valid_file(array $file): bool
 {
     if (empty($file) && $_SERVER['CONTENT_LENGTH'] > 0) {
         serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
@@ -264,13 +264,13 @@ function analyse_file(array $file): array
     ];
 }
 
-function get_file_type($file): string
+function get_file_type(string $file): string
 {
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     return $finfo->file($file);
 }
 
-function is_valid_file_type($file_type): bool
+function is_valid_file_type(string $file_type): bool
 {
     $search = array_search($file_type, FILETYPE_BLOCKLIST, true);
     if ($search === false)
@@ -278,7 +278,7 @@ function is_valid_file_type($file_type): bool
     return false;
 }
 
-function get_file_extension($filename): string
+function get_file_extension(string $filename): string
 {
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
@@ -297,7 +297,7 @@ function get_file_extension($filename): string
     return '.' . $extension;
 }
 
-function save_file($file): void
+function save_file(array $file): void
 {   
     $extension = get_file_extension($file['name']);
 
@@ -342,7 +342,7 @@ function save_file($file): void
     echo $url . PHP_EOL;
 }
 
-function random_string($length): string
+function random_string(int $length): string
 {
     $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     $size = strlen($chars) - 1;
@@ -533,7 +533,7 @@ function purge_files(): void
     }    
 }
 
-function calculate_retention_age($filesize): float
+function calculate_retention_age(float $filesize): float
 {
     return MIN_FILE_AGE +
             (MAX_FILE_AGE - MIN_FILE_AGE) *
