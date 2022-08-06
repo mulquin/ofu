@@ -223,32 +223,45 @@ function has_uploaded_valid_file($file): bool
             break;
     }
 
-    $filesize = filesize($file['tmp_name']);
+    $analysis = analyse_file($file);
 
-    if ($filesize === 0) {
+    if ($analysis['filesize'] === 0) {
         serve_http_code(400, 'Uploaded file is empty');
         return false;
     }
 
-    if ($filesize !== $file['size']) {
+    if ($analysis['filesize'] !== $file['size']) {
         serve_http_code(400, 'Error while uploading file');
         return false;
     }
 
-    if ($filesize > MAX_FILESIZE * 1024 * 1024) {
+    if ($analysis['filesize'] > MAX_FILESIZE * 1024 * 1024) {
         serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
         return false;
     }
 
-    $file_type = get_file_type($file['tmp_name']);
-    $is_valid_file_type = is_valid_file_type($file_type);
+    if ($analysis['filetype'] !== $file['type']) {
+        serve_http_code(400, 'Error while uploading file');
+        return false;
+    }
+
+    $is_valid_file_type = is_valid_file_type($analysis['filetype']);
 
     if ($is_valid_file_type !== true) {
-        serve_http_code(400, 'Invalid file type (' . $file_type . ')');
+        serve_http_code(400, 'Invalid file type (' . $analysis['filetype'] . ')');
         return false;
     }
     
     return true;
+}
+
+function analyse_file(array $file): array
+{
+    return [
+        'filesize' => filesize($file['tmp_name']),
+        'filetype' => get_file_type($file['tmp_name']),
+        'extension' => get_file_extension($file['name'])
+    ];
 }
 
 function get_file_type($file): string
