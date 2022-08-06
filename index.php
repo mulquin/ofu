@@ -1,17 +1,17 @@
 <?php
 
-const PRINT_DEBUG = false; // Show debug info on the index page
+const PRINT_DEBUG = false;
 
 define('MAX_FILESIZE', intval(ini_get('upload_max_filesize'))); // Filesize in MiB
-const MAX_FILE_AGE = 365; // Max days in age
-const MIN_FILE_AGE = 7; // Min days in age
+const MAX_FILE_AGE = 365;
+const MIN_FILE_AGE = 7;
 
 const GRAPH_COLS = 80; // Width of graph (not including borders / legend)
 const GRAPH_ROWS = 30;
 
 const DECAY_EXPONENT = 3; // Exponent to modify retention algo. Larger numbers punish large files
 
-const RANDOM_FILENAME_LENGTH = 4; // Length of random filename
+const RANDOM_FILENAME_LENGTH = 4;
 
 const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
 
@@ -309,8 +309,6 @@ function save_file($file): void
         serve_http_code(520, 'Could not move file: ' . json_encode($file));
         return;
     }
-
-    // TODO: External Anti-virus
 
     if (UPLOAD_LOG_PATH !== null) {
         file_put_contents(
