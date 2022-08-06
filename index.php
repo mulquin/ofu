@@ -142,7 +142,7 @@ function serve_http_code(int $code, string $message = ''): void
         );
     }
 
-    if ($code === 500 || $code === 520)
+    if (($code === 500 || $code === 520) && PRINT_DEBUG === false)
         $message = $default_code_message[$code];
 
     header('HTTP/1.1 ' . $code . ' ' . $default_code_message[$code]);
