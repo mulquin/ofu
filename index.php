@@ -668,7 +668,7 @@ Service Info
 ===============
 For early deletion or to report abuse, please send email to {$admin_email}
 
-The code for this script can be found on Github: <a href="https://github.com/mul91n/ofu">mul91n/ofu</a>
+The code for this script can be found on Github: <a href="https://github.com/mulquin/ofu">mulquin/ofu</a>
 </pre>
 </body>
 </html>
