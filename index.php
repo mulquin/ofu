@@ -164,6 +164,26 @@ function is_uploading_file(): bool
     return false;
 }
 
+function rearrange_files_array(array $files): array 
+{
+    $rearranged = [];
+    foreach ($files as $key => $values) {
+        foreach ($values as $index => $value) {
+            $rearranged[$index][$key] = $value;
+        }
+    }
+    return $rearranged;
+}
+
+function has_uploaded_valid_files(array $files): bool
+{
+    foreach ($files as $file) {
+        if (!has_uploaded_valid_file($file))
+            return false;
+    }
+    return true;
+}
+
 function has_uploaded_valid_file(array $file): bool
 {
     if (empty($file) && $_SERVER['CONTENT_LENGTH'] > 0) {
@@ -297,6 +317,13 @@ function get_file_extension(string $filename): string
     return '.' . $extension;
 }
 
+function save_files(array $files): void
+{
+    foreach ($files as $file) {
+        save_file($file);
+    }
+}
+
 function save_file(array $file): void
 {   
     $extension = get_file_extension($file['name']);
@@ -329,7 +356,7 @@ function save_file(array $file): void
             implode("\t", [
                 date('c'),
                 $_SERVER['REMOTE_ADDR'],
-                filesize($file['tmp_name']),
+                filesize($file['name']),
                 escapeshellarg($file['name']),
                 $filename
             ]) . PHP_EOL,
@@ -552,6 +579,7 @@ function print_debug_info(): string
     $post_max_size = ini_get('post_max_size');
     $max_input_time = ini_get('max_input_time');
     $max_execution_time = ini_get('max_execution_time');
+    $max_file_uploads = ini_get('max_file_uploads');
     $user_constants = print_r(get_defined_constants(true)['user'], true);
     return <<<DEBUG
     
@@ -565,6 +593,7 @@ upload_max_filesize: {$upload_max_filesize}
 post_max_size: {$post_max_size}
 max_input_time: {$max_input_time}
 max_execution_time: {$max_execution_time}
+max_file_uploads: {$max_file_uploads}
 
 Constants:
 {$user_constants}</span>
@@ -579,6 +608,8 @@ function print_index(): void
     $max_filesize = MAX_FILESIZE;
     $max_filesize_in_bytes = MAX_FILESIZE * 1024 * 1024;
     $upload_timeout = ini_get('max_input_time');
+    $max_file_uploads = ini_get('max_file_uploads');
+
     $admin_email = ADMIN_EMAIL;
     $decay_exponent = DECAY_EXPONENT;
     
@@ -591,9 +622,9 @@ function print_index(): void
     $retention_example = round(calculate_retention_age($retention_example_filesize),1);
 
     if (AUTH_USER !== null && AUTH_PW !== null)
-        $curl_cmd = 'curl -u ' . AUTH_USER . ':' . AUTH_PW . ' -F';
+        $curl_cmd = 'curl -u ' . AUTH_USER . ':' . AUTH_PW;
     else
-        $curl_cmd = 'curl -F';
+        $curl_cmd = 'curl';
 
 echo <<<INDEX
 <!doctype html>
@@ -628,6 +659,7 @@ pre > span { color: red; }
 Files are stored for {$min_age} days up to {$max_age} days depending on filesize
 The maximum filesize is {$max_filesize} MiB
 Uploads will timeout at {$upload_timeout} seconds
+A maximum of {$max_file_uploads} files can be uploaded at once
 
 Blocked filetypes:
 {$filetype_blocklist}
@@ -636,13 +668,13 @@ Blocked filetypes:
 How to Upload
 ===============
 You can upload files via simple HTTP POST requests, e.g. using curl:
-  {$curl_cmd} "file=@yourfile.png" {$site_url}
+  {$curl_cmd} -F "files[]=@yourfile.png" {$site_url}
 
 Or you can use the form below:
 </pre>
 <form id="ofu" method="post" enctype="multipart/form-data">
 <input type="hidden" name="MAX_FILE_SIZE" value="{$max_filesize_in_bytes}" />
-<input type="file" name="file" id="file" />
+<input type="file" name="files[]" id="files" multiple />
 <input type="submit" value="Upload" />
 </form>
 <pre>
@@ -686,13 +718,13 @@ if (!is_uploading_file()) {
         print_index();
     }
 } else {
-    $uploading_file = [];
+    $uploading_files = [];
     basic_auth();
-    if (isset($_FILES['file']))
-        $uploading_file = $_FILES['file'];
+    if (isset($_FILES['files']))
+        $uploading_files = rearrange_files_array($_FILES['files']);
 
-    if (!has_uploaded_valid_file($uploading_file))
+    if (!has_uploaded_valid_files($uploading_files))
         exit;
 
-    save_file($uploading_file);
+    save_files($uploading_files);
 }
