@@ -6,15 +6,17 @@
   \___/|_|  \__,_|
         one file uploader
 ```
-
-# ofu
-One File Uploader -- A simple PHP uploading script
-
 ## Features
 
 * Multiple files at once
 * Basic HTTP authentication
 * MIME type blocklist
+
+## Usage
+
+`curl -F "files[]=@yourfile.png" https://yourdomain`
+
+Or use the webform
 
 ## .htaccess info
 
