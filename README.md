@@ -1,11 +1,20 @@
+```
+         __       
+   ___  / _|_   _ 
+  / _ \| |_| | | |
+ | (_) |  _| |_| |
+  \___/|_|  \__,_|
+        one file uploader
+```
+
 # ofu
 One File Uploader -- A simple PHP uploading script
 
-This is a fork of <a href="https://github.com/rouji/single_php_filehost">rouji/single_php_filehost</a>
+## Features
 
-File validation code adapted from php.net answer by <a href="https://www.php.net/manual/en/features.file-upload.php#114004">CertaiN</a>
-
-HTTP Basic Auth code adapted from Gist by <a href="https://gist.github.com/westonruter/3131129">westonruter</a>
+* Multiple files at once
+* Basic HTTP authentication
+* MIME type blocklist
 
 ## .htaccess info
 
@@ -30,6 +39,14 @@ php_flag engine off
 SetHandler None
 AddType text/plain .php .php5 .phtml .html .htm .cpp .c .h .sh .cmd .bat .jar
 ```
+
+## Credits
+
+This is a fork of <a href="https://github.com/rouji/single_php_filehost">rouji/single_php_filehost</a>
+
+File validation code adapted from php.net answer by <a href="https://www.php.net/manual/en/features.file-upload.php#114004">CertaiN</a>
+
+HTTP Basic Auth code adapted from Gist by <a href="https://gist.github.com/westonruter/3131129">westonruter</a>
 
 ## Secure file upload resources
 
