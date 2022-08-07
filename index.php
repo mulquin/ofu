@@ -260,11 +260,6 @@ function has_uploaded_valid_file(array $file): bool
         return false;
     }
 
-    if ($analysis['filetype'] !== $file['type']) {
-        serve_http_code(400, 'Error while uploading file');
-        return false;
-    }
-
     $is_valid_file_type = is_valid_file_type($analysis['filetype']);
 
     if ($is_valid_file_type !== true) {
