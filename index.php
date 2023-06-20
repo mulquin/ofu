@@ -1,5 +1,7 @@
 <?php
 
+define('SITE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? ‘http’ : 'https') . '://' . $_SERVER['HTTP_HOST'] . '/');
+
 const PRINT_DEBUG = false;
 
 define('MAX_FILESIZE', intval(ini_get('upload_max_filesize'))); // Filesize in MiB
@@ -32,16 +34,6 @@ const ADMIN_EMAIL = 'admin@email.com';
 const AUTH_REALM = 'Access denied';
 const AUTH_USER = 'username'; // Both user and pass must not be null for basic authentication
 const AUTH_PW = null; 
-
-function site_url(): string
-{
-    if (isset($_SERVER['HTTP_HOST'])) {
-        $protocol = 'http';
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            $protocol .= 's';
-        return $protocol . '://' . $_SERVER['HTTP_HOST'] . '/';
-    }
-}
 
 function mkdir_if_no_dir(string $path, int $permissions = 0750): bool
 {
@@ -359,7 +351,7 @@ function save_file(array $file): void
         );
     }
 
-    $url = site_url() . $filename;
+    $url = SITE_URL . $filename;
 
     echo $url . PHP_EOL;
 }
@@ -597,7 +589,7 @@ DEBUG;
 
 function print_index(): void
 {
-    $site_url = site_url();
+    $site_url = SITE_URL;
     $min_age = MIN_FILE_AGE;
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
