@@ -1,10 +1,12 @@
 <?php
 
-define('SITE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? ‘http’ : 'https') . '://' . $_SERVER['HTTP_HOST'] . '/');
+define('SITE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? "http" : 'https') . '://' . $_SERVER['HTTP_HOST'] . '/');
 
 const PRINT_DEBUG = false;
 
 define('MAX_FILESIZE', intval(ini_get('upload_max_filesize'))); // Filesize in MiB
+const MIN_FILESIZE = 1024; // Filesize in bytes
+
 const MAX_FILE_AGE = 365;
 const MIN_FILE_AGE = 7;
 
@@ -251,6 +253,11 @@ function has_uploaded_valid_file(array $file): bool
         serve_http_code(413, 'Max file size (' . MAX_FILESIZE . ' MiB) exceeded');
         return false;
     }
+
+    if ($analysis['filesize'] < MIN_FILESIZE) {
+        serve_http_code(400, 'Min file size (' . MIN_FILESIZE . ' bytes) not met');
+        return false;
+    } 
 
     $is_valid_file_type = is_valid_file_type($analysis['filetype']);
 
