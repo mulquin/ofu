@@ -601,6 +601,7 @@ function print_index(): void
     $max_age = MAX_FILE_AGE;
     $max_filesize = MAX_FILESIZE;
     $max_filesize_in_bytes = MAX_FILESIZE * 1024 * 1024;
+    $min_filesize = MIN_FILESIZE;
     $upload_timeout = ini_get('max_input_time');
     $max_file_uploads = ini_get('max_file_uploads');
 
@@ -653,6 +654,7 @@ pre > details > summary:hover { cursor: pointer; }
 
 Files are stored for {$min_age} days up to {$max_age} days depending on filesize
 The maximum filesize is {$max_filesize} MiB
+The miniumum filsize is {$min_filesize} bytes
 Uploads will timeout at {$upload_timeout} seconds
 A maximum of {$max_file_uploads} files can be uploaded at once
 
