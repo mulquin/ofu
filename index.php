@@ -399,7 +399,6 @@ function create_retention_graph(): array
     $cols = GRAPH_COLS;
 
     $increment_x = ($max_x-$min_x) / $cols;
-    $increment_y = ($max_y-$min_y) / $rows;
 
     $x_offset = (strlen($max_y) > 4) ? strlen($max_y) + 1 : 5;
 
@@ -453,7 +452,6 @@ function create_retention_graph(): array
     $space_between = round(($cols - 1 - $max_x_length - $half_x_length) / 2) - 1;
 
     $space_left = $space_between;
-    $is_between = false;
 
     $graph = [];
 
@@ -519,7 +517,6 @@ function create_retention_graph(): array
 
 function purge_files(): void
 {
-    $files_deleted = [];
     foreach (scandir(STORAGE_PATH) as $filename) {
         if ($filename === '.' || $filename === '..' || $filename === 'index.html')
             continue;
