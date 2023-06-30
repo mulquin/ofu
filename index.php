@@ -25,10 +25,12 @@ const UPLOAD_LOG_PATH = LOG_DIR . 'ofu-upload.' . TODAY_DATE . '.log';
 const ERROR_LOG_PATH = LOG_DIR . 'ofu-error.' . TODAY_DATE . '.log';
 const PURGE_LOG_PATH = LOG_DIR . 'ofu-purge.' . TODAY_DATE . '.log';
 
-const FILETYPE_BLOCKLIST = [
-    'application/x-dosexec', 'application/x-executable', 'application/x-hdf5', 
-    'application/java-archive', 'application/java-vm', 
-    'application/vnd.android.package-archive'
+const FILETYPE_ALLOWLIST = [
+    'text/plain', 'text/csv', 'text/html',
+    'application/json',
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'image/jpeg', 'image/png', 'image/svg+xml', 'image/gif'
 ];
 
 const ADMIN_EMAIL = 'admin@email.com';
@@ -286,10 +288,8 @@ function get_file_type(string $file): string
 
 function is_valid_file_type(string $file_type): bool
 {
-    $search = array_search($file_type, FILETYPE_BLOCKLIST, true);
-    if ($search === false)
-        return true;
-    return false;
+    return array_search($file_type, FILETYPE_ALLOWLIST, true) !== false;
+    
 }
 
 function get_file_extension(string $filename): string
@@ -576,7 +576,7 @@ function print_debug_info(): string
     $max_file_uploads = ini_get('max_file_uploads');
     $user_constants = print_r(get_defined_constants(true)['user'], true);
     return <<<DEBUG
-    
+
 <span>===============
 Debug Info
 ===============
@@ -607,7 +607,7 @@ function print_index(): void
     $admin_email = ADMIN_EMAIL;
     $decay_exponent = DECAY_EXPONENT;
     
-    $filetype_blocklist = wordwrap(implode(', ', FILETYPE_BLOCKLIST), 80, PHP_EOL);
+    $filetype_allowlist = wordwrap(implode(', ', FILETYPE_ALLOWLIST), 80, PHP_EOL);
 
     $debug_info = print_debug_info();
 
@@ -655,8 +655,8 @@ The maximum filesize is {$max_filesize} MiB
 Uploads will timeout at {$upload_timeout} seconds
 A maximum of {$max_file_uploads} files can be uploaded at once
 
-Blocked filetypes:
-{$filetype_blocklist}
+Allowed filetypes:
+{$filetype_allowlist}
 {$debug_info}
 ===============
 How to Upload
