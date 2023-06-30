@@ -577,9 +577,9 @@ function print_debug_info(): string
     $user_constants = print_r(get_defined_constants(true)['user'], true);
     return <<<DEBUG
 
-<span>===============
+<details><summary>===============
 Debug Info
-===============
+===============</summary>
 Has root .htaccess: {$has_root_htaccess}
 Has files .htaccess: {$has_files_htaccess}
 php.ini: {$ini_file}
@@ -590,7 +590,7 @@ max_execution_time: {$max_execution_time}
 max_file_uploads: {$max_file_uploads}
 
 Constants:
-{$user_constants}</span>
+{$user_constants}</details>
 DEBUG;    
 }
 
@@ -639,7 +639,8 @@ strong > span {
 }
 strong > span:nth-child(2) { animation-delay: 1.166s; }
 strong > span:nth-child(3) { animation-delay: 2.323s; }
-pre > span { color: red; }
+pre > details { color: red; }
+pre > details > summary:hover { cursor: pointer; }
 </style>
 </head>
 <body>
