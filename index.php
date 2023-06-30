@@ -20,6 +20,8 @@ const RANDOM_FILENAME_LENGTH = 4;
 const STORAGE_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
 
 define('TODAY_DATE', date('Y-m-d'));
+
+const OFU_LOGGING = false;
 define('LOG_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR);
 const UPLOAD_LOG_PATH = LOG_DIR . 'ofu-upload.' . TODAY_DATE . '.log';
 const ERROR_LOG_PATH = LOG_DIR . 'ofu-error.' . TODAY_DATE . '.log';
@@ -41,7 +43,7 @@ const AUTH_PW = null;
 
 function ofu_log(string $path, array $data, $additional_condition = true) : void 
 {
-    if ($path !== null && $additional_condition === true) {
+    if (OFU_LOGGING === true && $path !== null && $additional_condition === true) {
         file_put_contents(
             $path,
             implode("\t", $data) . PHP_EOL,
