@@ -39,6 +39,17 @@ const AUTH_REALM = 'Access denied';
 const AUTH_USER = 'username'; // Both user and pass must not be null for basic authentication
 const AUTH_PW = null; 
 
+function ofu_log(string $path, array $data, $additional_condition = true) : void 
+{
+    if ($path !== null && $additional_condition === true) {
+        file_put_contents(
+            $path,
+            implode("\t", $data) . PHP_EOL,
+            FILE_APPEND
+        );
+    }
+}
+
 function mkdir_if_no_dir(string $path, int $permissions = 0750): bool
 {
     if (!is_dir($path)) {
@@ -125,18 +136,14 @@ function serve_http_code(int $code, string $message = ''): void
     if ($message === '')
         $message = $default_code_message[$code];
 
-    if (ERROR_LOG_PATH !== null && $code !== 401) {
-        file_put_contents(
-            ERROR_LOG_PATH,
-            implode("\t", [
-                date('c'),
-                $_SERVER['REMOTE_ADDR'],
-                $code,
-                $message
-            ]) . PHP_EOL,
-            FILE_APPEND
-        );
-    }
+    ofu_log(ERROR_LOG_PATH, 
+    [
+        date('c'),
+        $_SERVER['REMOTE_ADDR'],
+        $code,
+        $message
+    ],
+    $code !== 401);
 
     if (($code === 500 || $code === 520) && PRINT_DEBUG === false)
         $message = $default_code_message[$code];
@@ -344,20 +351,15 @@ function save_file(array $file): void
         return;
     }
 
-    if (UPLOAD_LOG_PATH !== null) {
-        file_put_contents(
-            UPLOAD_LOG_PATH,
-            implode("\t", [
-                date('c'),
-                $_SERVER['REMOTE_ADDR'],
-                filesize($file['name']),
-                escapeshellarg($file['name']),
-                $filename
-            ]) . PHP_EOL,
-            FILE_APPEND
-        );
-    }
-
+    ofu_log(UPLOAD_LOG_PATH, 
+    [
+        date('c'),
+        $_SERVER['REMOTE_ADDR'],
+        filesize($file['name']),
+        escapeshellarg($file['name']),
+        $filename
+    ]);
+    
     $url = SITE_URL . $filename;
 
     echo $url . PHP_EOL;
@@ -531,27 +533,18 @@ function purge_files(): void
 
         if ($file_age > $retention_age) {
             unlink($file);
-            $files_deleted[] = [
-                'filename' => $filename,
-                'filesize' => $filesize,
-                'file_age' => $file_age
-            ];
-            echo 'Deleted "' . $filename . '", ' . $filesize . ' MiB, ' . $file_age . ' days old' . PHP_EOL;
-        }
-    }
 
-    if (!empty($files_deleted) && PURGE_LOG_PATH !== null) {
-        $purge_log = '';
-        foreach ($files_deleted as $file) {
-            $purge_log .= implode("\t", [
-                            date('c'),
-                            $file['filename'],
-                            $file['filesize'],
-                            $file['file_age']
-                        ]) . PHP_EOL;
+            echo 'Deleted "' . $filename . '", ' . $filesize . ' MiB, ' . $file_age . ' days old' . PHP_EOL;
+
+            ofu_log(PURGE_LOG_PATH, 
+            [
+                date('c'),
+                $filename,
+                $filesize,
+                $file_age
+            ]);
         }
-        file_put_contents(PURGE_LOG_PATH, $purge_log, FILE_APPEND);
-    }    
+    } 
 }
 
 function calculate_retention_age(float $filesize): float
