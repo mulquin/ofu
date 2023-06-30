@@ -657,7 +657,7 @@ Allowed filetypes:
 How to Upload
 ===============
 You can upload files via simple HTTP POST requests, e.g. using curl:
-  {$curl_cmd} -F "files[]=@yourfile.png" {$site_url}
+  {$curl_cmd} -F "files[]=@file1.png" -F "files[]=@file2.txt" {$site_url}
 
 Or you can use the form below:
 </pre>
