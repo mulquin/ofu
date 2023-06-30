@@ -6,15 +6,19 @@
   \___/|_|  \__,_|
         one file uploader
 ```
+
+This is a minimal PHP script for uploading files. I have only deployed this on Apache so unsure how it would work with other webservers.
+
 ## Features
 
 * Multiple files at once
 * Basic HTTP authentication
-* MIME type blocklist
+* MIME type allowlist
+* Retention graph
 
 ## Usage
 
-`curl -F "files[]=@yourfile.png" https://yourdomain`
+`curl -F "files[]=@file1.png" -F "files[]=@file2.txt" https://yourdomain`
 
 Or use the webform
 
