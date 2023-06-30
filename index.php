@@ -357,7 +357,7 @@ function save_file(array $file): void
     [
         date('c'),
         $_SERVER['REMOTE_ADDR'],
-        filesize($file['name']),
+        filesize($target_path),
         escapeshellarg($file['name']),
         $filename
     ]);
