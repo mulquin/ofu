@@ -1,6 +1,6 @@
 <?php
 
-define('SITE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? "http" : 'https') . '://' . $_SERVER['HTTP_HOST'] . '/');
+define('SITE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? "https" : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/');
 
 const PRINT_DEBUG = false;
 
